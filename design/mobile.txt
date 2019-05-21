@@ -1,0 +1,80 @@
+# Screens:
++ Sign in
++ Sign up
++ Main
++ Chat
++ User info
++ Account
+
+# Details:
+* Main: tabs with bottom bar contains icons: contacts, discussions, notifications, settings.
+	+ Contacts tab:
+		. Top bar:
+			Input field with search icon
+			Small add friend button
+			3 filter buttons: all, online, offline
+		. Body:
+			Title: Contacts
+			Flatlist with
+				ListItem: thumbnail with status left, name and status body, 'more' options popoverview right with
+					View info >> link to user info screen
+					Chat >> link to chat screen
+					Unfriend
+		. Modal: 
+			Add friend modal: form
+				Username input field
+				Display area: user thumbnail and name or error if not found
+				Message input area short
+
+	+ Discussions tab:
+		. Top bar: like above, not button
+		. Body:
+			Title: Discussions
+			FLatList with
+				ListItem: thumbnail (of lastest message sender), sender (with time right) and message body
+	
+	+ Notifications tab:
+		. Body:
+			Title: Notifications
+			Button: clear all
+			FlatList with:
+				ListItem: swipeable to delete, thumbnail left, content and time body
+	
+	+ Settings tab:
+		. User top: avatar, name, username
+		. Title: Settings
+		. FlatList with:
+			ListItem: Icon left, label + description body, right depends (arrow right or slider)
+			Content: My Account, Dark Mode, Sign out 
+
+* Chat:
+ 	+ Top bar: like list item of contacts list, with different popover menu
+	+ Bottom bar: input field to send message
+	+ Body: ScrollView/FlatList auto scroll to bottom
+		Message component
+
+* User info: thumbnail, name, username, send message button
+* Account: look like a form, thumbnail + upload avatar button, input field username disabled, name input field, change password button, save button in the bottom
+	+ Change password area: current password, new password, retype password
+
+# Store:
++ theme
++ user info
++ groups
++ friends
+
+# Components:
+* Common:
+	+ Common style in layout file
+		. Text: color for 2 themes
+		. Font: size, type
+
+	+ Input field: icon left, right with event handler, placeholder, styles for 2 themes, event handler for input
+	+ Input area: placeholder, event handler, styles for 2 themes
+	+ Thumbnail: status: on/off/null, image, event handler
+	+ TextButton: text, event handler
+	+ IconButton: icon, event handler
+	+ Popover menu
+
+* Specific:
+	+ Chat message: if not sender then thumbail left + different color, 2 styles for 2 themes
