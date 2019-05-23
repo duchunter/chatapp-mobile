@@ -78,6 +78,9 @@
 		<string>CircularStd-Bold.woff</string>
 		<string>CircularStd-Book.woff</string>
 		<string>CircularStd-Medium.woff</string>
+		<string>CircularStd-Black.ttf</string>
+		<string>CircularStd-Book.ttf</string>
+		<string>CircularStd-Medium.ttf</string>
 	</array>
 </dict>
 </plist>

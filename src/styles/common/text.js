@@ -1,56 +1,53 @@
-const default = {
+const defaultStyle = {
   color: '#212529'
-}
+};
 
-export default {
-  // Weight
-  book: {
-    ...default,
-    fontFamily: 'CircularStd-Book'
-  },
+export const book = {
+  ...defaultStyle,
+  fontFamily: 'CircularStd-Book'
+};
 
-  medium: {
-    ...default,
-    fontFamily: 'CircularStd-Medium'
-  },
+export const medium = {
+  ...defaultStyle,
+  fontFamily: 'CircularStd-Medium'
+};
 
-  bold: {
-    ...default,
-    fontFamily: 'CircularStd-Bold'
-  },
+export const bold = {
+  ...defaultStyle,
+  fontFamily: 'CircularStd-Bold'
+};
 
-  // Size
-  font_15: {
-    fontSize: 15,
-    lineHeight: 22
-  },
+// Size
+export const font15 = {
+  fontSize: 15,
+  lineHeight: 22
+};
 
-  font_16: {
-    fontSize: 16,
-    lineHeight: 22
-  },
+export const font16 = {
+  fontSize: 16,
+  lineHeight: 22
+};
 
-  font_18: {
-    fontSize: 18,
-    lineHeight: 22
-  },
+export const font18 = {
+  fontSize: 18,
+  lineHeight: 22
+};
 
-  font_20: {
-    fontSize: 20,
-    lineHeight: 24
-  },
+export const font20 = {
+  fontSize: 20,
+  lineHeight: 24
+};
 
-  font_24: {
-    fontSize: 24,
-    lineHeight: 29
-  },
+export const font24 = {
+  fontSize: 24,
+  lineHeight: 29
+};
 
-  // Color
-  active: {
-    color: '#2196F3'
-  },
+// Color
+export const active = {
+  color: '#2196F3'
+};
 
-  blur: {
-    color: '#bdbac2'
-  }
-}
+export const blur = {
+  color: '#bdbac2'
+};
