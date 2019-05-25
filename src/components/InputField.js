@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from 'native-base';
 
 import { backgroudGrey, grey } from 'chatmobile/src/styles/common/color';
-import { font16, medium, blur } from 'chatmobile/src/styles/common/text';
+import { font16, medium, blur, book } from 'chatmobile/src/styles/common/text';
 
 const localStyles = StyleSheet.create({
   container: {
@@ -28,11 +28,11 @@ const localStyles = StyleSheet.create({
   }
 });
 
-export default function Input({ iconLeft, iconRight, onChange, onSubmit, placeholder, styles }) {
+export default function Input({ iconLeft, iconRight, onChange, onSubmit, placeholder, style }) {
   const [ text, setText ] = useState('');
 
   return (
-    <View style={[ localStyles.container, styles ]}>
+    <View style={[ localStyles.container, style ]}>
       {
         iconLeft && (
           <TouchableOpacity onPress={iconLeft.onPress}>
@@ -52,7 +52,7 @@ export default function Input({ iconLeft, iconRight, onChange, onSubmit, placeho
         value={text}
         placeholder={placeholder}
         placeholderTextColor={grey}
-        style={[ medium, font16, blur, localStyles.input ]}
+        style={[ book, font16, localStyles.input ]}
       />
 
       {

@@ -4,10 +4,11 @@ import { Container, Tab, Tabs, TabHeading, Icon } from 'native-base';
 import Contacts from 'chatmobile/src/containers/app/Contacts';
 import Discussions from 'chatmobile/src/containers/app/Discussions';
 import Notifications from 'chatmobile/src/containers/app/Notifications';
+import Settings from 'chatmobile/src/containers/app/Settings';
 
 import { active, blur } from 'chatmobile/src/styles/common/text';
 
-export default function TabsExample() {
+export default function Main({ navigation }) {
   const [ page, setPage ] = useState(0);
   const tabs = [
     {
@@ -24,7 +25,7 @@ export default function TabsExample() {
     },
     {
       icon: 'settings',
-      child: Notifications
+      child: Settings
     }
   ];
 
@@ -32,7 +33,11 @@ export default function TabsExample() {
     <Container>
       <Tabs
         page={page}
-        onChangeTab={(data) => setPage(data.i)}
+        onChangeTab={({ i }) => {
+          setTimeout(() => {
+            setPage(i);
+          }, 0);
+        }}
         tabBarPosition="bottom"
         tabBarUnderlineStyle={{ backgroundColor: active.color }}
       >
@@ -50,7 +55,7 @@ export default function TabsExample() {
                 </TabHeading>
               }
             >
-              {tab.child()}
+              {tab.child({ navigation })}
             </Tab>
           ))
         }

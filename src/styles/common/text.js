@@ -18,6 +18,11 @@ export const bold = {
 };
 
 // Size
+export const font14 = {
+  fontSize: 14,
+  lineHeight: 22
+};
+
 export const font15 = {
   fontSize: 15,
   lineHeight: 22
@@ -50,4 +55,8 @@ export const active = {
 
 export const blur = {
   color: '#bdbac2'
+};
+
+export const white = {
+  color: 'white'
 };
