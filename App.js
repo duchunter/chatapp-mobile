@@ -6,7 +6,16 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { Component, setGlobal } from 'reactn';
+import { Root } from 'native-base';
+
+setGlobal({
+  userInfo: {},
+  friends: [],
+  groups: [],
+  notifications: [],
+  selectedGroup: {}
+});
 
 import AppContainer from 'chatmobile/src/navigation';
 
@@ -14,7 +23,9 @@ type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
-      <AppContainer/>
+      <Root>
+        <AppContainer/>
+      </Root>
     );
   }
 }

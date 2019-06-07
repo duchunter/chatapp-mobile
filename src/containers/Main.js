@@ -6,10 +6,15 @@ import Discussions from 'chatmobile/src/containers/app/Discussions';
 import Notifications from 'chatmobile/src/containers/app/Notifications';
 import Settings from 'chatmobile/src/containers/app/Settings';
 
+import Loading from 'chatmobile/src/components/Loading';
+
+import useSocket from 'chatmobile/src/hooks/useSocket';
 import { active, blur } from 'chatmobile/src/styles/common/text';
 
 export default function Main({ navigation }) {
   const [ page, setPage ] = useState(0);
+  const { isLoading } = useSocket();
+
   const tabs = [
     {
       icon: 'account-circle',
@@ -31,6 +36,10 @@ export default function Main({ navigation }) {
 
   return (
     <Container>
+      {
+        isLoading && <Loading />
+      }
+
       <Tabs
         page={page}
         onChangeTab={({ i }) => {
@@ -55,7 +64,7 @@ export default function Main({ navigation }) {
                 </TabHeading>
               }
             >
-              {tab.child({ navigation })}
+              {tab.child({ navigation, setPage })}
             </Tab>
           ))
         }

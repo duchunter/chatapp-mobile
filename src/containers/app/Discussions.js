@@ -1,29 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { ListItem, Left, Body, Right } from 'native-base';
+import moment from 'moment';
 
 import InputField from 'chatmobile/src/components/InputField';
 import Avatar from 'chatmobile/src/components/Avatar';
+
+import useStore from 'chatmobile/src/hooks/useStore';
 
 import {
   font24, font16, font15, blur, medium, bold, book
 } from 'chatmobile/src/styles/common/text';
 
 export default function Discussions({ navigation }) {
-  const groups = [
-    {
-      name: 'Group chat',
-      active: true
-    },
-    {
-      name: 'Group chat 1',
-      active: true
-    },
-    {
-      name: 'Group chat 2',
-      active: false
-    }
-  ];
+  const [ filterText, setFilterText ] = useState('');
+  const { state, mutations } = useStore();
+  const { groups, friends } = state;
+
+  const getFilteredList = () => {
+    return groups.filter(group => {
+      return group.name.toLowerCase().includes(filterText.toLowerCase());
+    });
+  };
+
+  const getActiveStatus = (group) => {
+    return group.members.some(username => {
+      let friend = friends.find(user => user.username === username);
+      return friend && friend.active;
+    });
+  };
 
   return (
     <ScrollView>
@@ -31,6 +36,7 @@ export default function Discussions({ navigation }) {
         <InputField
           iconLeft={{ name: 'md-search' }}
           placeholder="Search for conversations..."
+          onChange={setFilterText}
         />
       </View>
 
@@ -39,17 +45,18 @@ export default function Discussions({ navigation }) {
       </Text>
 
       {
-        groups.map((group, index) => (
+        getFilteredList().map((group, index) => (
           <ListItem
             key={index}
             onPress={() => {
+              mutations.SET_SELECTED_GROUP(group);
               navigation.navigate('Chat');
             }}
           >
             <Left style={{ maxWidth: 70, minWidth: 70 }}>
               <Avatar
-                isActive={group.active}
-                img={require('chatmobile/src/assets/img/ava.jpg')}
+                isActive={getActiveStatus(group)}
+                name={group.name}
               />
             </Left>
             <Body>
@@ -57,11 +64,21 @@ export default function Discussions({ navigation }) {
                 {group.name}
               </Text>
               <Text style={[ font15, medium ]}>
-                A chat message, this is a test
+                {
+                  group.messages && group.messages.length > 0
+                    ? group.messages[ 0 ].content
+                    : 'Start by typing something'
+                }
               </Text>
             </Body>
             <Right>
-              <Text note style={[ book, blur ]}>3:43 pm</Text>
+              <Text note style={[ book, blur ]}>
+                {
+                  group.messages && group.messages.length > 0
+                    ? moment(group.messages[ 0 ].created).fromNow()
+                    : ''
+                }
+              </Text>
             </Right>
           </ListItem>
         ))

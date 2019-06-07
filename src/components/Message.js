@@ -32,7 +32,7 @@ export default function Message({ avatar, content, created }) {
           </Left>
         )
       }
-      <Body style={{ alignItems: 'flex-start' }}>
+      <Body style={{ alignItems: avatar ? 'flex-start' : 'flex-end' }}>
         <View style={[ styles.contentContainer, !avatar && { backgroundColor: active } ]}>
           <Text style={[ font16, book, !avatar && white ]}>
             {content}

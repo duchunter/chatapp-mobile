@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Thumbnail } from 'native-base';
 
 import { grey, active } from 'chatmobile/src/styles/common/color';
+import { font24, bold } from 'chatmobile/src/styles/common/text';
 
 const styles = StyleSheet.create({
   status: {
@@ -22,13 +23,37 @@ const styles = StyleSheet.create({
     width: 13,
     borderRadius: 10,
     backgroundColor: active
+  },
+
+  textAva: {
+    minHeight: 50,
+    maxHeight: 50,
+    minWidth: 50,
+    maxWidth: 50,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: grey,
+    backgroundColor: 'white',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
-export default function Avatar({ isActive, img }) {
+export default function Avatar({ isActive, img, name }) {
   return (
     <View>
-      <Thumbnail source={img} />
+      {
+        img ? (
+          <Thumbnail source={img} />
+        ) : (
+          <View style={styles.textAva}>
+            <Text style={[ bold, font24, { lineHeight: 24 } ]}>
+              {name[ 0 ].toUpperCase()}
+            </Text>
+          </View>
+        )
+      }
       {
         isActive !== null && (
           <View style={styles.status}>

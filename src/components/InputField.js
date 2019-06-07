@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from 'native-base';
 
 import { backgroudGrey, grey } from 'chatmobile/src/styles/common/color';
-import { font16, medium, blur, book } from 'chatmobile/src/styles/common/text';
+import { font16, book } from 'chatmobile/src/styles/common/text';
 
 const localStyles = StyleSheet.create({
   container: {
@@ -28,9 +28,15 @@ const localStyles = StyleSheet.create({
   }
 });
 
-export default function Input({ iconLeft, iconRight, onChange, onSubmit, placeholder, style }) {
-  const [ text, setText ] = useState('');
-
+export default function Input({
+  iconLeft,
+  iconRight,
+  onChange,
+  onSubmit,
+  placeholder,
+  style,
+  value
+}) {
   return (
     <View style={[ localStyles.container, style ]}>
       {
@@ -44,12 +50,11 @@ export default function Input({ iconLeft, iconRight, onChange, onSubmit, placeho
       <TextInput
         onEndEditing={onSubmit}
         onChangeText={val => {
-          setText(val);
           if (onChange) {
             onChange(val);
           }
         }}
-        value={text}
+        value={value}
         placeholder={placeholder}
         placeholderTextColor={grey}
         style={[ book, font16, localStyles.input ]}

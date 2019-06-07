@@ -2,6 +2,8 @@ import React from 'react';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import { ListItem, Left, Body, Right, Thumbnail, Icon } from 'native-base';
 
+import useStore from 'chatmobile/src/hooks/useStore';
+
 import {
   font24, font16, font15, font18, blur, bold, book
 } from 'chatmobile/src/styles/common/text';
@@ -14,17 +16,20 @@ const styles = StyleSheet.create({
 });
 
 export default function Settings() {
-  const userInfo = {
-    name: 'Duc Ha',
-    username: 'testuser',
-    ava: require('chatmobile/src/assets/img/ava.jpg')
-  };
-
+  const { state } = useStore();
+  const { userInfo } = state;
 
   return (
     <ScrollView>
       <View style={styles.infoContainer}>
-        <Thumbnail large source={userInfo.ava} />
+        <Thumbnail
+          large
+          source={
+            userInfo.avatar && userInfo.avatar !== 'defautl'
+              ? { uri: userInfo.avatar }
+              : require('chatmobile/src/assets/img/avatar.png')
+          }
+        />
         <Text style={[ font18, bold, { marginTop: 10, marginBottom: 2 } ]}>
           {userInfo.name}
         </Text>
