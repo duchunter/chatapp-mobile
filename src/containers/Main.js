@@ -16,7 +16,7 @@ import { active, blur } from 'chatmobile/src/styles/common/text';
 
 export default function Main({ navigation }) {
   const [ page, setPage ] = useState(0);
-  const { isLoading } = useSocket(socket);
+  const { isLoading, isError } = useSocket(socket);
   const { state } = useStore();
 
   const { notifications } = state;
@@ -39,6 +39,10 @@ export default function Main({ navigation }) {
       child: Settings
     }
   ];
+
+  if (isError) {
+    navigation.navigate('Login');
+  }
 
   return (
     <Container>

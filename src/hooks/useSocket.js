@@ -11,10 +11,10 @@ export default function useSocket(socket) {
 
   useEffect(() => {
     SInfo.getItem('username', {}).then(user => {
-      // if (!user) {
-      //   setIsError(true);
-      //   return;
-      // }
+      if (!user) {
+        setIsError(true);
+        return;
+      }
 
       socket.emit('user-connected', { username: 'test1' }, (data) => {
         let { username, name, avatar, friends, notifications, groups } = data;
