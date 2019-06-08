@@ -28,7 +28,7 @@ const localStyles = StyleSheet.create({
   }
 });
 
-export default function Input({
+export default function InputField({
   iconLeft,
   iconRight,
   onChange,

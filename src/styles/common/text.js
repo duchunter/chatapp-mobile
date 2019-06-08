@@ -43,6 +43,11 @@ export const font20 = {
   lineHeight: 24
 };
 
+export const font22 = {
+  fontSize: 22,
+  lineHeight: 26
+};
+
 export const font24 = {
   fontSize: 24,
   lineHeight: 29

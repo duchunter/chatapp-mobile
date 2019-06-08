@@ -16,7 +16,7 @@ export default function useSocket(socket) {
       //   return;
       // }
 
-      socket.emit('user-connected', { username: 'duchm' }, (data) => {
+      socket.emit('user-connected', { username: 'test1' }, (data) => {
         let { username, name, avatar, friends, notifications, groups } = data;
         mutations.SET_ALL_INFO({
           friends,

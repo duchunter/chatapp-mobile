@@ -5,6 +5,8 @@ import { ListItem, Left, Body, Right, Icon, ActionSheet } from 'native-base';
 import InputField from 'chatmobile/src/components/InputField';
 import FilterBar from 'chatmobile/src/components/FilterBar';
 import Avatar from 'chatmobile/src/components/Avatar';
+import AddButton from 'chatmobile/src/components/AddButton';
+import InputModal from 'chatmobile/src/components/InputModal';
 
 import alert from 'chatmobile/src/plugins/alert';
 import socket from 'chatmobile/src/plugins/socket';
@@ -13,22 +15,34 @@ import useStore from 'chatmobile/src/hooks/useStore';
 import { font24, font16, font15, blur, medium, bold } from 'chatmobile/src/styles/common/text';
 
 const BUTTONS = [
-  { text: 'Send message', icon: 'md-chatbubbles', iconColor: '#2c8ef4' },
-  { text: 'Delete contact', icon: 'md-trash', iconColor: '#f42ced' },
-  { text: 'Cancel', icon: 'close', iconColor: '#25de5b' }
+  { text: 'Send message', icon: 'md-chatbubbles', iconColor: 'black' },
+  { text: 'Delete contact', icon: 'md-trash', iconColor: 'black' },
+  { text: 'Cancel', icon: 'close', iconColor: 'black' }
 ];
 
 export default function Contacts({ setPage }) {
   const [ filterMode, setFilterMode ] = useState(0);
   const [ filterText, setFilterText ] = useState('');
+  const [ visible, setVisible ] = useState(false);
+
   const { state } = useStore();
   const { friends, userInfo } = state;
+
+  const sendRequest = (username) => {
+    socket.emit('add-friend', { receiverUsername: username }, isSuccess => {
+      if (isSuccess) {
+        alert({ text: 'Request sent' });
+      } else {
+        alert({ text: 'Something went wrong', type: 'danger' });
+      }
+    });
+  };
 
   const showAction = (user) => {
     ActionSheet.show(
       {
         options: BUTTONS,
-        cancelButtonIndex: 2,
+        cancelButtonIndex: BUTTONS.length - 1,
         title: user.name
       },
       buttonIndex => {
@@ -78,6 +92,18 @@ export default function Contacts({ setPage }) {
 
   return (
     <ScrollView>
+      <AddButton onPress={() => setVisible(true)}/>
+
+      <InputModal
+        visible={visible}
+        title={'Add your friends'}
+        label={'USERNAME'}
+        placeholder={'Add recipient'}
+        buttonText={'Send request'}
+        onClose={() => setVisible(false)}
+        onSubmit={sendRequest}
+      />
+
       <View style={{ margin: 15 }}>
         <InputField
           iconLeft={{ name: 'md-search' }}

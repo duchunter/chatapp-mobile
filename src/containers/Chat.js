@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import { StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import {
-  Container, Header, Content, Footer, Left, Body, Right, Icon
+  Container, Header, Content, Footer, Left, Body, Right, Icon, ActionSheet
 } from 'native-base';
 import moment from 'moment';
 
 import Avatar from 'chatmobile/src/components/Avatar';
 import InputField from 'chatmobile/src/components/InputField';
 import Message from 'chatmobile/src/components/Message';
+import InputModal from 'chatmobile/src/components/InputModal';
 
 import useStore from 'chatmobile/src/hooks/useStore';
 import socket from 'chatmobile/src/plugins/socket';
+import alert from 'chatmobile/src/plugins/alert';
 
 import { font16, font15, blur, medium, bold } from 'chatmobile/src/styles/common/text';
+
+const BUTTONS = [
+  { text: 'Change group name', icon: 'md-create', iconColor: 'black' },
+  { text: 'Add member', icon: 'md-person-add', iconColor: 'black' },
+  { text: 'Kick member', icon: 'md-walk', iconColor: 'black' },
+  { text: 'Leave group', icon: 'md-trash', iconColor: 'black' },
+  { text: 'Cancel', icon: 'close', iconColor: 'black' }
+];
 
 const styles = StyleSheet.create({
   header: {
@@ -26,11 +36,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function Chat() {
+export default function Chat({ navigation }) {
+  // State
   const [ chatText, setChatText ] = useState('');
-  const { state } = useStore();
+  const [ modal, setModal ] = useState({});
+  const [ visible, setVisible ] = useState(false);
+
+  // Store
+  const { state, mutations } = useStore();
   const { selectedGroup, friends, userInfo } = state;
 
+  // Parser
   const getActiveStatus = () => {
     return selectedGroup.members.some(username => {
       let friend = friends.find(user => user.username === username);
@@ -53,6 +69,129 @@ export default function Chat() {
     }
 
     return require('chatmobile/src/assets/img/avatar.png');
+  };
+
+  // Socket
+  const changeName = (name) => {
+    const payload = {
+      group: {
+        ...selectedGroup,
+        id: selectedGroup._id,
+        name
+      }
+    };
+    socket.emit('update-group-chat-info', payload, isSuccess => {
+      if (isSuccess) {
+        alert({ text: 'Done' });
+      } else {
+        alert({ text: 'Something went wrong', type: 'danger' });
+      }
+    });
+  };
+
+  const addMember = (username) => {
+    const payload = {
+      username,
+      groupId: selectedGroup._id
+    };
+    socket.emit('add-member', payload, isSuccess => {
+      if (isSuccess) {
+        alert({ text: 'Done' });
+      } else {
+        alert({ text: 'Something went wrong', type: 'danger' });
+      }
+    });
+  };
+
+  const kickMember = (username) => {
+    const payload = {
+      username,
+      groupId: selectedGroup._id,
+      groupName: selectedGroup.name
+    };
+    socket.emit('remove-member', payload, isSuccess => {
+      if (isSuccess) {
+        alert({ text: 'Done' });
+      } else {
+        alert({ text: 'Something went wrong', type: 'danger' });
+      }
+    });
+  };
+
+  const leaveGroup = () => {
+    const payload = {
+      groupId: selectedGroup._id,
+      username: userInfo.username
+    };
+    socket.emit('remove-member', payload, isSuccess => {
+      if (isSuccess) {
+        alert({ text: 'Done' });
+        mutations.REMOVE_GROUP(selectedGroup._id);
+        navigation.goBack();
+      } else {
+        alert({ text: 'Something went wrong', type: 'danger' });
+      }
+    });
+  };
+
+  // Methods
+  const showAction = () => {
+    ActionSheet.show(
+      {
+        options: BUTTONS,
+        cancelButtonIndex: BUTTONS.length - 1,
+        title: selectedGroup.name
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+        // Change name
+        case 0:
+          setVisible(true);
+          setModal({
+            title: 'Change group name',
+            label: 'GROUP NAME',
+            placeholder: 'Enter new group name',
+            buttonText: 'Submit',
+            onSubmit: changeName,
+            onClose: () => setVisible(false)
+          });
+          break;
+
+        // Add member
+        case 1:
+          setVisible(true);
+          setModal({
+            title: 'Add new member',
+            label: 'USERNAME',
+            placeholder: 'Enter username',
+            buttonText: 'Add to group',
+            onSubmit: addMember,
+            onClose: () => setVisible(false)
+          });
+          break;
+
+        // Kick member
+        case 2:
+          setVisible(true);
+          setModal({
+            title: 'Kick a member',
+            label: 'USERNAME',
+            placeholder: 'Enter username',
+            buttonText: 'Kick from group',
+            onSubmit: kickMember,
+            onClose: () => setVisible(false)
+          });
+          break;
+
+        // Leave group
+        case 3:
+          leaveGroup();
+          break;
+        default:
+            // Do nothing
+        }
+      }
+    );
   };
 
   const submit = () => {
@@ -89,7 +228,7 @@ export default function Chat() {
           </Text>
         </Body>
         <Right>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={showAction}>
             <Icon
               name="md-more"
               style={[ blur, { fontSize: 22, paddingRight: 10 } ]}
@@ -124,6 +263,8 @@ export default function Chat() {
           value={chatText}
         />
       </Footer>
+
+      <InputModal {...modal} visible={visible}/>
     </Container>
   );
 }
