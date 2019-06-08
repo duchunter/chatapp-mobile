@@ -1,6 +1,7 @@
 import React, { useGlobal } from 'reactn';
 
 export default function useStore() {
+  const [ global ] = useGlobal();
   const [ userInfo, setUserInfo ] = useGlobal('userInfo');
   const [ friends, setFriends ] = useGlobal('friends');
   const [ groups, setGroups ] = useGlobal('groups');
@@ -32,14 +33,14 @@ export default function useStore() {
     },
 
     ADD_GROUP(group) {
-      let newGroups = [ ...groups ];
+      let newGroups = [ ...global.groups ];
       newGroups.unshift(group);
       setGroups(newGroups);
     },
 
     UPDATE_GROUP(group) {
       let groupIndex = 0;
-      let newGroups = [ ...groups ];
+      let newGroups = [ ...global.groups ];
       let target = newGroups.find((g, index) => {
         if (g._id === group._id) {
           groupIndex = index;
@@ -53,13 +54,17 @@ export default function useStore() {
         if (!group.messages) {
           newGroups[ groupIndex ].messages = target.messages;
         }
+
+        if (group._id === global.selectedGroup._id) {
+          setSelectedGroup(newGroups[ groupIndex ]);
+        }
       }
 
       setGroups(newGroups);
     },
 
     REMOVE_GROUP(groupId) {
-      setGroups(groups.filter(group => group._id !== groupId));
+      setGroups(global.groups.filter(group => group._id !== groupId));
     },
 
     SET_NOTIFICATIONS(payload) {
@@ -67,14 +72,14 @@ export default function useStore() {
     },
 
     ADD_NOTIFICATION(noti) {
-      let notis = [ ...notifications ];
+      let notis = [ ...global.notifications ];
       notis.unshift(noti);
       setNotifications(notis);
     },
 
     ADD_NEW_MESSAGE(message) {
       let groupIndex = 0;
-      let group = groups.find((g, index) => {
+      let group = global.groups.find((g, index) => {
         if (g._id === message.group_id) {
           groupIndex = index;
           return true;
@@ -85,14 +90,18 @@ export default function useStore() {
       if (group) {
         group.messages.unshift(message);
 
-        let newGroups = [ ...groups ];
+        let newGroups = [ ...global.groups ];
         newGroups[ groupIndex ] = group;
+
+        if (group._id === global.selectedGroup._id) {
+          setSelectedGroup(group);
+        }
         setGroups(newGroups);
       }
     },
 
     UPDATE_FRIEND_STATUS({ username, active }) {
-      if (username === userInfo.username) {
+      if (username === global.userInfo.username) {
         return;
       }
 
@@ -106,7 +115,7 @@ export default function useStore() {
       });
 
       if (friend) {
-        let friendList = [ ...friends ];
+        let friendList = [ ...gloabal.friends ];
         friendList[ friendIndex ].active = active;
         setFriends(friendList);
       }
@@ -114,7 +123,7 @@ export default function useStore() {
 
     UPDATE_FRIEND_PROFILE({ username, name, avatar }) {
       let friendIndex = 0;
-      let friend = friends.find((user, index) => {
+      let friend = gloabal.friends.find((user, index) => {
         if (user.username === username) {
           friendIndex = index;
           return true;
@@ -123,7 +132,7 @@ export default function useStore() {
       });
 
       if (friend) {
-        let friendList = [ ...friends ];
+        let friendList = [ ...global.friends ];
         friendList[ friendIndex ].name = name;
         friendList[ friendIndex ].avatar = avatar;
         setFriends(friendList);

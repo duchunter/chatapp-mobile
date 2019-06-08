@@ -9,11 +9,13 @@ import Settings from 'chatmobile/src/containers/app/Settings';
 import Loading from 'chatmobile/src/components/Loading';
 
 import useSocket from 'chatmobile/src/hooks/useSocket';
+import socket from 'chatmobile/src/plugins/socket';
+
 import { active, blur } from 'chatmobile/src/styles/common/text';
 
 export default function Main({ navigation }) {
   const [ page, setPage ] = useState(0);
-  const { isLoading } = useSocket();
+  const { isLoading } = useSocket(socket);
 
   const tabs = [
     {

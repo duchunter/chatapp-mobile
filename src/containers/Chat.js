@@ -59,7 +59,7 @@ export default function Chat() {
     if (chatText) {
       let message = {
         created: Date.now(),
-        group_id: selectedGroup,
+        group_id: selectedGroup._id,
         sender: userInfo.username,
         content: chatText
       };

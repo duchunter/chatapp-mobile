@@ -35,7 +35,7 @@ export default function Message({ avatar, content, created }) {
       <Body style={{ alignItems: avatar ? 'flex-start' : 'flex-end' }}>
         <View style={[ styles.contentContainer, !avatar && { backgroundColor: active } ]}>
           <Text style={[ font16, book, !avatar && white ]}>
-            {content}
+            {content.replace('\n', '')}
           </Text>
         </View>
 

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'reactn';
 import SInfo from 'react-native-sensitive-info';
 
-import socket from 'chatmobile/src/plugins/socket';
 import alert from 'chatmobile/src/plugins/alert';
 import useStore from 'chatmobile/src/hooks/useStore';
 
-export default function useSocket() {
+export default function useSocket(socket) {
   const [ isLoading, setIsLoading ] = useState(true);
   const [ isError, setIsError ] = useState(false);
   const { mutations } = useStore();
